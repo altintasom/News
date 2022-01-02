@@ -1,4 +1,4 @@
-package com.altintasomer.application.news.model.network
+package com.altintasomer.application.news.model.network.v2source
 
 import com.google.gson.annotations.SerializedName
 
