@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav"
+    app:startDestination="@id/newsSourcesListFragment">
+
+    <fragment
+        android:id="@+id/newsSourcesListFragment"
+        android:name="com.altintasomer.application.news.view.NewsSourcesListFragment"
+        android:label="News Sources"
+        tools:layout="@layout/fragment_news_sources_list" >
+        <action
+            android:id="@+id/action_newsSourcesListFragment_to_sourceFragment"
+            app:destination="@id/sourceFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/sourceFragment"
+        android:name="com.altintasomer.application.news.view.SourceFragment"
+        android:label="News"
+        tools:layout="@layout/fragment_source" >
+        <argument android:name="sourceId"
+            app:argType="string"/>
+        <action
+            android:id="@+id/action_sourceFragment_to_newsSourcesListFragment"
+            app:destination="@id/newsSourcesListFragment" />
+    </fragment>
+</navigation>

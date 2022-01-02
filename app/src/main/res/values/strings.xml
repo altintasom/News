@@ -1,3 +1,17 @@
 <resources>
     <string name="app_name">News</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="temp_desc">Get the latest independent tech news, reviews and analysis from Recode with the most informed and respected journalists in technology and media.</string>
+    <string name="error_connection">Connection error!</string>
+    <string name="error_no_news_sources">Not found news sources</string>
+    <string name="filter">Filter</string>
+    <string name="added">Okuma listemden çıkar</string>
+    <string name="added_read">Okuma listeme ekle</string>
+    <string name="error_added">Haber eklenirken hata oluştu!</string>
+    <string name="success_deleted">Okuma listesinden kaldırıldı</string>
+    <string name="success_added">Okuma listsine eklendi</string>
+    <string name="error_deleted">Haber silinirken hata oluştu!</string>
+    <string name="again">Tekrar dene</string>
+    <string name="noting_info">Bilgiler alınamadı!</string>
 </resources>
