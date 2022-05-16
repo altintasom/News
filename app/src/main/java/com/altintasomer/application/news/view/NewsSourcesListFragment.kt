@@ -31,11 +31,9 @@ class NewsSourcesListFragment : Fragment(R.layout.fragment_news_sources_list) {
     private fun init(view: View) {
         val binding = FragmentNewsSourcesListBinding.bind(view)
 
-        val newsSourcesAdapter = NewsSourcesAdapter(object : NewsSourcesAdapter.OnItemClickListener{
-            override fun onItemClick(sources: Sources) {
-                val action = NewsSourcesListFragmentDirections.actionNewsSourcesListFragmentToSourceFragment(sourceId = sources.id?:"")
-                findNavController().navigate(action)
-            }
+        val newsSourcesAdapter = NewsSourcesAdapter(onItemClicked = {
+            val action = NewsSourcesListFragmentDirections.actionNewsSourcesListFragmentToSourceFragment(sourceId = it.id?:"")
+            findNavController().navigate(action)
         })
 
         binding.rvNewsSources.also{
@@ -45,7 +43,7 @@ class NewsSourcesListFragment : Fragment(R.layout.fragment_news_sources_list) {
         }
 
 
-        viewModel.newsSources.observe(viewLifecycleOwner,{
+        viewModel.newsSources.observe(viewLifecycleOwner){
             it.getContentIfNotHandled()?.let {
                 when(it.status){
                     Status.LOADING ->{
@@ -54,9 +52,6 @@ class NewsSourcesListFragment : Fragment(R.layout.fragment_news_sources_list) {
                     Status.SUCCESS ->{
                         binding.progressBar.visibility = View.GONE
                         it.data?.let {
-                            Log.d(TAG, "init: size: "+it.size)
-
-                           /* newsSourcesAdapter.updateList(it as ArrayList<Sources>)*/
                             newsSourcesAdapter.differ.submitList(it)
                         }
                     }
@@ -77,28 +72,21 @@ class NewsSourcesListFragment : Fragment(R.layout.fragment_news_sources_list) {
 
                 }
             }
-        })
+        }
 
-        val adapterCategory = CategoryAdapter(arrayListOf(),object : CategoryAdapter.OnItemClickListener{
-
-            override fun onAddCategory(category: String) {
-                viewModel.addCategory(category)
-            }
-
-            override fun onDeleteCategory(category: String) {
-                viewModel.deleteCategory(category)
-            }
-
+        val adapterCategory = CategoryAdapter(arrayListOf(),onAddCategory = {
+            viewModel.addCategory(it)
+        },onDeleteCategory = {
+            viewModel.deleteCategory(it)
         })
 
        binding.rvCategory.also {
            it.adapter = adapterCategory
             it.layoutManager = LinearLayoutManager(requireContext(),LinearLayoutManager.HORIZONTAL,false)
        }
-        viewModel.categories.observe(viewLifecycleOwner,{
-            Log.d(TAG, "init: size: categories: "+ it)
+        viewModel.categories.observe(viewLifecycleOwner){
             adapterCategory.updateList(it as ArrayList<String>)
-        })
+        }
     }
 
 

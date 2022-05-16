@@ -15,14 +15,11 @@ import com.altintasomer.application.news.utils.ItemAnimation
 private const val TAG = "CategoryAdapter"
 class CategoryAdapter(
     private val categories: ArrayList<String>,
-    private val onItemClickListener: OnItemClickListener
+    private var onAddCategory: (category : String) -> Unit,
+    private var onDeleteCategory : (category : String) -> Unit
 ) : RecyclerView.Adapter<CategoryAdapter.CategoryViewHolder>() {
 
    private val selectedCategories = ArrayList<String>()
-    interface OnItemClickListener {
-        fun onAddCategory(category : String)
-        fun onDeleteCategory(category: String)
-    }
 
     fun updateList(categories: ArrayList<String>) {
         this.categories.clear()
@@ -45,10 +42,10 @@ class CategoryAdapter(
 
                         if (binding.btnCategory.isSelected){
                             Log.d(TAG, "onCreateViewHolder: selected: "+binding.btnCategory.text)
-                            onItemClickListener.onAddCategory(binding.btnCategory.text?.toString()?:"")
+                            onAddCategory(binding.btnCategory.text?.toString()?:"")
                         }else{
                             Log.d(TAG, "onCreateViewHolder: not selected: "+binding.btnCategory.text)
-                            onItemClickListener.onDeleteCategory(binding.btnCategory.text?.toString()?:"")
+                            onDeleteCategory(binding.btnCategory.text?.toString()?:"")
                         }
 
 

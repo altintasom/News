@@ -24,13 +24,10 @@ private const val TAG = "SourcesVerticalAdapter"
 
 class SourcesVerticalAdapter(
     private val readList : List<ArticlesEntity>,
-    private val onItemClickListener: OnItemClickListener
+    private var onInsertClicked : (articles: Articles) -> Unit,
+    private var onDeleteClicked : (articles: Articles) -> Unit
 ) : RecyclerView.Adapter<SourcesVerticalAdapter.SourcesItemViewHolder>() {
 
-    interface OnItemClickListener {
-        fun onInsertClick(articles: Articles)
-        fun onDeleteClick(articles: Articles)
-    }
 
     private val differCallback = object : DiffUtil.ItemCallback<Articles>() {
         override fun areItemsTheSame(oldItem: Articles, newItem: Articles): Boolean {
@@ -60,10 +57,10 @@ class SourcesVerticalAdapter(
         holder.addRemove.setOnClickListener {
            if (holder.addRemove.text.equals(holder.itemView.resources.getString(R.string.added))){
                holder.addRemove.text = holder.itemView.resources.getString(R.string.added_read)
-               onItemClickListener.onDeleteClick(articles)
+              onDeleteClicked(articles)
            }else{
                holder.addRemove.text = holder.itemView.resources.getString(R.string.added)
-               onItemClickListener.onInsertClick(articles)
+               onInsertClicked(articles)
            }
         }
         setAnimation(holder.itemView,position)
