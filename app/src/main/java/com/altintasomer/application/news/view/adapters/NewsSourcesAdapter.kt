@@ -8,27 +8,17 @@ import androidx.recyclerview.widget.AsyncListDiffer
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.altintasomer.application.news.databinding.NewsSourcesItemBinding
+import com.altintasomer.application.news.model.network.v2headlines.Source
 import com.altintasomer.application.news.model.network.v2source.Sources
 import com.altintasomer.application.news.utils.ItemAnimation
 import com.altintasomer.application.news.utils.ItemAnimation.Companion.FADE_IN
 
 class NewsSourcesAdapter(
-    /*private var sourcesList: ArrayList<Sources>,*/
-    private val onItemClickListener: OnItemClickListener
+   private var onItemClicked : (source : Sources) -> Unit
 ) : RecyclerView.Adapter<NewsSourcesAdapter.SourcesItemViewHolder>() {
-
-    interface OnItemClickListener {
-        fun onItemClick(sources: Sources)
-    }
-
     class SourcesItemViewHolder(val binding: NewsSourcesItemBinding) :
         RecyclerView.ViewHolder(binding.root)
 
-/*    fun updateList(sources: ArrayList<Sources>) {
-        this.sourcesList.clear()
-        this.sourcesList.addAll(sources)
-        notifyDataSetChanged()
-    }*/
 
     private val differCallback = object : DiffUtil.ItemCallback<Sources>() {
         override fun areItemsTheSame(oldItem: Sources, newItem: Sources): Boolean {
@@ -59,7 +49,9 @@ class NewsSourcesAdapter(
             binding.root.setOnClickListener {
                 adapterPosition.also {
                     if (it != Adapter.NO_SELECTION) {
-                        onItemClickListener.onItemClick(differ.currentList.get(it))
+                        differ.currentList.get(it)?.let {
+                            onItemClicked(it)
+                        }
                     }
                 }
             }

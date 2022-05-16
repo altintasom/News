@@ -14,13 +14,9 @@ import com.squareup.picasso.Picasso
 class SliderAdapter(
     private val articlesList: ArrayList<Articles?>,
     private val readList : List<ArticlesEntity>,
-    private val onItemClickListener: OnItemClickListener,
+    private var onInsertClicked : (articles: Articles) -> Unit,
+    private var onDeleteClicked : (articles: Articles) -> Unit
 ) : SliderViewAdapter<SliderAdapter.SliderViewHolder>() {
-
-    interface OnItemClickListener {
-        fun onInsertClick(articles: Articles)
-        fun onDeleteClick(articles: Articles)
-    }
 
     fun update(articlesList: List<Articles>) {
         this.articlesList.clear()
@@ -55,12 +51,12 @@ class SliderAdapter(
             if (viewHolder.addRemove.text.equals(viewHolder.itemView.resources.getString(R.string.added))) {
                 viewHolder.addRemove.text = viewHolder.itemView.resources.getString(R.string.added_read)
                 if (articles != null) {
-                    onItemClickListener.onDeleteClick(articles = articles)
+                    onDeleteClicked(articles)
                 }
             } else {
                 viewHolder.addRemove.text = viewHolder.itemView.resources.getString(R.string.added)
                 if (articles != null) {
-                    onItemClickListener.onInsertClick(articles = articles)
+                    onInsertClicked(articles)
                 }
             }
         }

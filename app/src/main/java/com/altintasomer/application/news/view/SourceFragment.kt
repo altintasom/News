@@ -59,29 +59,19 @@ class SourceFragment : Fragment(R.layout.fragment_source) {
          * initialize slider adapter and callback function for db operation (insert and delete)
          * */
         val sliderAdapter =
-            SliderAdapter(arrayListOf(),viewModel.articleEntities, object : SliderAdapter.OnItemClickListener {
-
-                override fun onInsertClick(articles: Articles) {
-                    viewModel.insertArticles(articles.articleEntity())
-                }
-
-                override fun onDeleteClick(articles: Articles) {
-                    viewModel.deleteWithUrl(articles.articleEntity())
-                }
+            SliderAdapter(arrayListOf(),viewModel.articleEntities, onDeleteClicked = {
+                viewModel.deleteWithUrl(it.articleEntity())
+            },onInsertClicked = {
+                viewModel.insertArticles(it.articleEntity())
             })
         /**
          * initialize adapter and callback function for db operation (insert and delete)
          * */
         val verticalAdapter = SourcesVerticalAdapter(viewModel.articleEntities,
-            object : SourcesVerticalAdapter.OnItemClickListener {
-                override fun onInsertClick(articles: Articles) {
-                    viewModel.insertArticles(articles.articleEntity())
-                }
-
-                override fun onDeleteClick(articles: Articles) {
-                    viewModel.deleteWithUrl(articles.articleEntity())
-                }
-
+            onDeleteClicked = {
+                viewModel.deleteWithUrl(it.articleEntity())
+            },onInsertClicked = {
+                viewModel.insertArticles(it.articleEntity())
             })
         /**
          * setting slider field
@@ -97,7 +87,7 @@ class SourceFragment : Fragment(R.layout.fragment_source) {
         /**
          * observing api response and UI Update
          * */
-        viewModel.selectedSource.observe(viewLifecycleOwner, {
+        viewModel.selectedSource.observe(viewLifecycleOwner) {
             it.getContentIfNotHandled()?.let {
                 when (it.status) {
                     Status.LOADING -> {
@@ -139,7 +129,7 @@ class SourceFragment : Fragment(R.layout.fragment_source) {
 
                 }
             }
-        })
+        }
 
         binding.rvVertical.also {
             it.adapter = verticalAdapter
@@ -151,7 +141,7 @@ class SourceFragment : Fragment(R.layout.fragment_source) {
         /**
          * handle the status of db operation
          * */
-        viewModel.dbStatus.observe(viewLifecycleOwner, {
+        viewModel.dbStatus.observe(viewLifecycleOwner) {
             it.getContentIfNotHandled()?.let {
                 when (it.status) {
                     Status.ERROR -> {
@@ -167,13 +157,13 @@ class SourceFragment : Fragment(R.layout.fragment_source) {
                     }
                 }
             }
-        })
+        }
 
-        viewModel.repeatSearchFinish.observe(viewLifecycleOwner, {
+        viewModel.repeatSearchFinish.observe(viewLifecycleOwner) {
             if (it) {
                 binding.progressBar.visibility = View.GONE
             }
-        })
+        }
 
         binding.swipe.setOnRefreshListener(object : SwipeRefreshLayout.OnRefreshListener {
             override fun onRefresh() {
